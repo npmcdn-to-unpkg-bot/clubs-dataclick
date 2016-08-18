@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        //enable phpstorm auto-complete
+        if ($this->app->environment() == 'local') {
+            $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
+        }
     }
 }
