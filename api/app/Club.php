@@ -16,4 +16,6 @@ class Club extends Model
         return $this->belongsToMany(Member::class)
             ->withTimestamps();
     }
+
+    protected $hidden = ['pivot'];
 }
