@@ -23,6 +23,8 @@ class CreateClubMemberTable extends Migration
                 ->references('id')->on('members')
                 ->onDelete('cascade');
 
+            $table->primary(['club_id', 'member_id']);
+
             $table->timestamps();
         });
     }
