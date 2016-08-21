@@ -7,6 +7,7 @@ use App\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+use Illuminate\Http\Response;
 use Validator;
 
 class MemberController extends Controller
@@ -16,7 +17,7 @@ class MemberController extends Controller
         $clubs = Member::all();
 
         if (count($clubs) == 0) {
-            return new JsonResponse(null, 204);
+            return new Response(null, 204);
         }
 
         return $clubs;
