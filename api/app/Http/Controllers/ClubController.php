@@ -27,7 +27,7 @@ class ClubController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, ['name' => 'required']);
+        $this->validate($request, ['name' => 'required|unique:clubs']);
 
         $club = new Club();
         $club->name = $request->name;

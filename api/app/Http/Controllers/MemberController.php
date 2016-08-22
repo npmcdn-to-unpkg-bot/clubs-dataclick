@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Club;
+use App\Exceptions\ApiException;
 use App\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use Illuminate\Http\Response;
+use Illuminate\Support\MessageBag;
 use Validator;
 
 class MemberController extends Controller
@@ -37,8 +39,8 @@ class MemberController extends Controller
             $member = $this->save($request);
 
             return new JsonResponse($member, 201);
-        } catch (\Exception $e) {
-            return $this->makeErrorResponse('Member story update', $e->getMessage());
+        } catch (ApiException $e) {
+            return $this->makeErrorResponse('Error storing member', $e->errors);
         }
     }
 
@@ -50,8 +52,8 @@ class MemberController extends Controller
             $this->doUpdate($request, $member);
 
             return new JsonResponse(Member::with('clubs')->where('id', $member->id)->get(), 200);
-        } catch (\Exception $e) {
-            return $this->makeErrorResponse('Member update error', $e->getMessage());
+        } catch (ApiException $e) {
+            return $this->makeErrorResponse('Error updating member', $e->errors);
         }
     }
 
@@ -63,54 +65,29 @@ class MemberController extends Controller
     }
 
     /**
-     * @param String $shortDescription
-     * @param String|null $longDescription
+     * @param String $error
+     * @param MessageBag $errors
      * @return JsonResponse
      */
-    public function makeErrorResponse(String $shortDescription, String $longDescription = null)
+    public function makeErrorResponse(String $error, MessageBag $errors)
     {
-        $error = [
-            'error' => $shortDescription,
-            'error_description' => $longDescription,
+        $errors = [
+            'error' => $error,
+            'error_description' => $errors
         ];
 
-        return new JsonResponse($error, 400);
+        return new JsonResponse($errors, 400);
     }
 
-    /**
-     * @param array $clubsID
-     * @return \App\Club[]
-     * @throws \Exception
-     * @internal param Request $request
-     */
-    private function validateAndGetClub(Array $clubsID)
-    {
-        $clubs = [];
-
-        foreach ($clubsID as $clubID) {
-            if ($club = Club::find($clubID['id'])) {
-                array_push($clubs, $club);
-            } else {
-                throw new \Exception('Invalid club');
-            }
-        }
-
-        return $clubs;
-    }
-
-    /**
-     * @param Request $request
-     * @throws \Exception
-     */
     private function validateFormForStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:members',
-            'clubs' => 'required'
+            'clubs.*.id' => 'exists:clubs'
         ]);
 
         if ($validator->fails()) {
-            throw new \Exception($validator->errors());
+            throw new ApiException($validator->errors());
         }
     }
 
@@ -120,10 +97,11 @@ class MemberController extends Controller
             'op' => 'required',
             'path' => 'required',
             'value' => 'required',
+            'value.*.id' => 'exists:clubs'
         ]);
 
         if ($validator->fails()) {
-            throw new \Exception($validator->errors());
+            throw new ApiException($validator->errors());
         }
     }
 
@@ -133,14 +111,12 @@ class MemberController extends Controller
      */
     private function save(Request $request)
     {
-        $clubs = $this->validateAndGetClub($request->clubs);
-
         $member = new Member();
         $member->name = $request->name;
         $member->save();
 
-        foreach ($clubs as $club) {
-            $member->clubs()->attach($club->id);
+        foreach ($request->clubs as $club) {
+            $member->clubs()->attach($club['id']);
         }
 
         return $member;
@@ -155,20 +131,17 @@ class MemberController extends Controller
         switch ($request->op) {
             case 'add':
                 if ($request->path == '/clubs') {
-                    $clubs = $this->validateAndGetClub($request->value);
-
-                    foreach ($clubs as $club) {
-                        if (!$member->clubs()->find($club->id)) {
-                            $member->clubs()->attach($club->id);
+                    foreach ($request->value[0] as $clubId) {
+                        if (!$member->clubs()->find($clubId)) {
+                            $member->clubs()->attach(Club::find($clubId));
                         }
                     }
                 }
                 break;
             case 'remove':
                 if ($request->path == '/clubs') {
-                    $clubs = $this->validateAndGetClub($request->value);
-                    foreach ($clubs as $club) {
-                        $member->clubs()->detach($club->id);
+                    foreach ($request->value[0] as $clubId) {
+                        $member->clubs()->detach(Club::find($clubId));
                     }
                 }
                 break;
