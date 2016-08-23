@@ -27,8 +27,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Flamengo'
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -39,8 +41,10 @@ class MemberControllerTest extends TestCase
             ]
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Leandro',
+                [
+                    'id' => 1,
+                    'name' => 'Leandro'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -57,8 +61,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Fluminense'
         ])
             ->seeJsonEquals([
-                'id' => 2,
-                'name' => 'Fluminense'
+                [
+                    'id' => 2,
+                    'name' => 'Fluminense'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -106,8 +112,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Flamengo'
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -118,8 +126,10 @@ class MemberControllerTest extends TestCase
             ]
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Leandro',
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -145,8 +155,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Flamengo'
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -158,8 +170,10 @@ class MemberControllerTest extends TestCase
             ]
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Leandro',
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -193,8 +207,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Flamengo'
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -203,8 +219,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Fluminense'
         ])
             ->seeJsonEquals([
-                'id' => 2,
-                'name' => 'Fluminense'
+                [
+                    'id' => 2,
+                    'name' => 'Fluminense'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -217,8 +235,10 @@ class MemberControllerTest extends TestCase
             ]
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Leandro',
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -248,8 +268,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Flamengo'
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -260,8 +282,10 @@ class MemberControllerTest extends TestCase
             ]
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Leandro',
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -272,16 +296,18 @@ class MemberControllerTest extends TestCase
                 ['id' => 1]
             ]
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
@@ -291,29 +317,33 @@ class MemberControllerTest extends TestCase
                 ['id' => 1]
             ]
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
 
         $this->get($this->endpoint . '/1')
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
     }
 
@@ -323,8 +353,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Flamengo'
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -332,8 +364,10 @@ class MemberControllerTest extends TestCase
             'name' => 'Fluminense'
         ])
             ->seeJsonEquals([
-                'id' => 2,
-                'name' => 'Fluminense'
+                [
+                    'id' => 2,
+                    'name' => 'Fluminense'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -344,8 +378,10 @@ class MemberControllerTest extends TestCase
             ]
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Leandro',
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -356,20 +392,22 @@ class MemberControllerTest extends TestCase
                 ['id' => 2]
             ]
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => 'Fluminense'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ],
+                        [
+                            'id' => 2,
+                            'name' => 'Fluminense'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
@@ -379,16 +417,18 @@ class MemberControllerTest extends TestCase
                 ['id' => 2]
             ]
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
@@ -398,29 +438,33 @@ class MemberControllerTest extends TestCase
                 ['id' => 2]
             ]
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
 
         $this->get($this->endpoint . '/1')
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro',
-                'clubs' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Flamengo'
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro',
+                    'clubs' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Flamengo'
+                        ]
                     ]
                 ]
-            ]])
+            ])
             ->seeStatusCode(200);
     }
 

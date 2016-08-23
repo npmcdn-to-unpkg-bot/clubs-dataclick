@@ -33,7 +33,7 @@ class ClubController extends Controller
         $club->name = $request->name;
         $club->save();
 
-        return new JsonResponse($club, 201);
+        return new JsonResponse([$club], 201);
     }
 
     public function destroy(Request $request, Club $club)

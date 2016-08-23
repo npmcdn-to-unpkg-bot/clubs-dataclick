@@ -26,8 +26,10 @@ class ClubControllerTest extends TestCase
             'name' => 'Flamengo',
         ])
             ->seeJsonEquals([
-                'id' => 1,
-                'name' => 'Flamengo'
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
             ])
             ->seeStatusCode(201);
 
@@ -36,8 +38,10 @@ class ClubControllerTest extends TestCase
             'name' => 'Fluminense'
         ])
             ->seeJsonEquals([
-                'id' => 2,
-                'name' => 'Fluminense'
+                [
+                    'id' => 2,
+                    'name' => 'Fluminense'
+                ]
             ])
             ->seeStatusCode(201);
 
