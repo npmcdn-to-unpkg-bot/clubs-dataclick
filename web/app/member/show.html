@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h3>{{ member.name }}
+            <span class="pull-right">
+                <button class="btn btn-xs btn-danger" ng-click="deleteMember(member)">
+                    Remover sócio
+                </button>
+            </span>
+        </h3>
+
+        <hr>
+        <div class="alert alert-danger" ng-show="error">
+            {{ error }}
+        </div>
+        <div ng-show="member.clubs.length > 0">
+            <h4>Sócio dos clubes:</h4>
+            <ul class="list-group">
+                <div class="list-group-item" ng-repeat="club in member.clubs | orderBy:'name'">{{ club.name }}
+                    <span class="pull-right">
+                        <button class="btn btn-xs btn-danger" ng-click="deleteClub(club)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </span>
+                </div>
+            </ul>
+        </div>
+
+        <div ng-show="member.clubs.length == 0">
+            <p>Sócio não associado a nenhum clube.</p>
+        </div>
+
+        <button class="btn btn-xs btn-primary" ui-sref="members">
+            Retornar para os sócios
+        </button>
+
+        <hr>
+
+        <form name="newClubForm" ng-submit="newClubForm.$valid && addClub()">
+            <div class="form-group">
+                <label>Associar ao clube:</label>
+                <select ng-model="member.club.id" class="form-control" required>
+                    <option value="{{ club.id }}" ng-repeat="club in clubs | orderBy:'name'">{{ club.name }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Associar</button>
+            </div>
+        </form>
+    </div>
+</div>
