@@ -94,4 +94,30 @@ class ClubControllerTest extends TestCase
         $this->get($this->endpoint)
             ->seeStatusCode(204);
     }
+
+    public function testSameClubTwice()
+    {
+        $this->post($this->endpoint, [
+            'name' => 'Flamengo'
+        ])
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
+            ])
+            ->seeStatusCode(201);
+
+        $this->post($this->endpoint, [
+            'name' => 'Flamengo'
+        ])
+            ->seeJsonEquals([
+                'error' => 'Error storing club',
+                'error_description' => [
+                    'name' => ['The name has already been taken.']
+                ]
+            ])
+            ->seeStatusCode(400);
+
+    }
 }

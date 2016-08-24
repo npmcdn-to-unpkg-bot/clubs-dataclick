@@ -88,7 +88,7 @@ class MemberControllerTest extends TestCase
             ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
-            'op' => 'remove',
+            'op' => 'delete',
             'path' => '/clubs',
             'value' => [
                 ['id' => 1]
@@ -411,7 +411,7 @@ class MemberControllerTest extends TestCase
             ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
-            'op' => 'remove',
+            'op' => 'delete',
             'path' => '/clubs',
             'value' => [
                 ['id' => 2]
@@ -432,7 +432,7 @@ class MemberControllerTest extends TestCase
             ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
-            'op' => 'remove',
+            'op' => 'delete',
             'path' => '/clubs',
             'value' => [
                 ['id' => 2]
@@ -468,4 +468,37 @@ class MemberControllerTest extends TestCase
             ->seeStatusCode(200);
     }
 
+    public function testTryStoreMemberWithoutClub() {
+        $this->post($this->endpoint, [
+            'name' => 'Leandro'
+        ])
+            ->seeStatusCode(400);
+    }
+
+    public function testDeleteMember() {
+
+        $this->post($this->baseUrl . '/clubs', [
+            'name' => 'Flamengo'
+        ])
+            ->seeJsonEquals([[
+                'id' => 1,
+                'name' => 'Flamengo'
+            ]])
+            ->seeStatusCode(201);
+
+        $this->post($this->endpoint, [
+            'name' => 'Leandro',
+            'clubs' => [
+                ['id' => 1]
+            ]
+        ])
+            ->seeJsonEquals([[
+                'id' => 1,
+                'name' => 'Leandro'
+            ]])
+            ->seeStatusCode(201);
+
+        $this->delete($this->endpoint . '/1')
+            ->seeStatusCode(204);
+    }
 }
