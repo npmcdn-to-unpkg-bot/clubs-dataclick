@@ -3,7 +3,11 @@
         <h3>Sócios</h3>
 
         <div class="list-group" ng-show="members.length > 0">
-            <a ui-sref="member({id: {{member.id}}})" class="list-group-item" ng-repeat="member in members | orderBy:'name'">{{ member.name }}</a>
+            <a ui-sref="member({id: {{member.id}}})" class="list-group-item" ng-repeat="member in members | orderBy:'name'">{{ member.name }}
+                <span class="pull-right">
+                    <span class="glyphicon glyphicon-link"></span>
+                </span>
+            </a>
         </div>
         <div ng-show="members.length == 0">
             <p>Nenhum sócio cadastrado.</p>
@@ -26,7 +30,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Criar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
             </div>
         </form>
 
