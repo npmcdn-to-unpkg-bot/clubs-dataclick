@@ -69,7 +69,7 @@ class MemberController extends Controller
      * @param MessageBag $errors
      * @return JsonResponse
      */
-    public function makeErrorResponse(String $error, MessageBag $errors)
+    private function makeErrorResponse(String $error, MessageBag $errors)
     {
         $errors = [
             'error' => $error,
@@ -83,6 +83,7 @@ class MemberController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:members',
+            'clubs' => 'required',
             'clubs.*.id' => 'exists:clubs'
         ]);
 
@@ -138,7 +139,7 @@ class MemberController extends Controller
                     }
                 }
                 break;
-            case 'remove':
+            case 'delete':
                 if ($request->path == '/clubs') {
                     foreach ($request->value[0] as $clubId) {
                         $member->clubs()->detach(Club::find($clubId));
