@@ -42,15 +42,15 @@ class ClubControllerTest extends TestCase
             ->seeStatusCode(200);
 
         //get clubs
-        $this->get($this->endpoint)
+        $this->get($this->endpoint . '?fields=name')
             ->seeJsonEquals([
                 [
                     'id' => 1,
-                    'name' => 'Flamengo'
+                    'name' => 'Flamengo',
                 ],
                 [
                     'id' => 2,
-                    'name' => 'Fluminense'
+                    'name' => 'Fluminense',
                 ]
             ])
             ->seeStatusCode(200);
@@ -72,7 +72,8 @@ class ClubControllerTest extends TestCase
             ->seeJsonEquals([
                 [
                     'id' => 2,
-                    'name' => 'Fluminense'
+                    'name' => 'Fluminense',
+                    'members' => []
                 ]
             ])
             ->seeStatusCode(200);
@@ -83,8 +84,7 @@ class ClubControllerTest extends TestCase
                 [
                     'id' => 2,
                     'name' => 'Fluminense',
-                    'members' => [
-                    ]
+                    'members' => []
                 ]
             ])
             ->seeStatusCode(200);
@@ -123,6 +123,64 @@ class ClubControllerTest extends TestCase
                 ]
             ])
             ->seeStatusCode(400);
-
     }
+
+    public function testIndex()
+    {
+
+        $this->post($this->endpoint, [
+            'name' => 'Flamengo'
+        ]);
+
+        $this->post($this->endpoint, [
+            'name' => 'Fluminense'
+        ]);
+
+        $this->post($this->baseUrl . '/members', [
+            'name' => 'Leandro',
+            'clubs' => [
+                ['id' => 1],
+                ['id' => 2]
+            ]
+        ]);
+
+        $this->get($this->endpoint)
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo',
+                    'members' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Leandro'
+                        ]
+                    ]
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Fluminense',
+                    'members' => [
+                        [
+                            'id' => 1,
+                            'name' => 'Leandro'
+                        ]
+                    ]
+                ],
+            ])
+            ->seeStatusCode(200);
+
+        $this->get($this->endpoint . '?fields=name')
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Fluminense'
+                ]
+            ])
+            ->seeStatusCode(200);
+    }
+
 }
