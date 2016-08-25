@@ -20,9 +20,11 @@ class MemberControllerTest extends TestCase
 
     public function testSome()
     {
+        //get the members
         $this->get($this->endpoint)
             ->seeStatusCode(204);
 
+        //new club
         $this->post($this->baseUrl . '/clubs', [
             'name' => 'Flamengo'
         ])
@@ -32,8 +34,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
+        //new member
         $this->post($this->endpoint, [
             'name' => 'Leandro',
             'clubs' => [
@@ -46,8 +49,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Leandro'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
+        //get the members
         $this->get($this->endpoint)
             ->seeJsonEquals([
                 [
@@ -57,6 +61,7 @@ class MemberControllerTest extends TestCase
             ])
             ->seeStatusCode(200);
 
+        //new club
         $this->post($this->baseUrl . '/clubs', [
             'name' => 'Fluminense'
         ])
@@ -66,8 +71,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Fluminense'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
+        //update the member
         $this->patch($this->endpoint . '/1', [
             'op' => 'add',
             'path' => '/clubs',
@@ -87,6 +93,7 @@ class MemberControllerTest extends TestCase
             ])
             ->seeStatusCode(200);
 
+        //update the member
         $this->patch($this->endpoint . '/1', [
             'op' => 'delete',
             'path' => '/clubs',
@@ -108,6 +115,7 @@ class MemberControllerTest extends TestCase
 
     public function testErrorSameName()
     {
+        //new club
         $this->post($this->baseUrl . '/clubs', [
             'name' => 'Flamengo'
         ])
@@ -117,8 +125,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
+        //new member
         $this->post($this->endpoint, [
             'name' => 'Leandro',
             'clubs' => [
@@ -131,8 +140,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Leandro',
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
+        //new member already exists
         $this->post($this->endpoint, [
             'name' => 'Leandro',
             'clubs' => [
@@ -150,7 +160,7 @@ class MemberControllerTest extends TestCase
 
     public function testNewSameClub()
     {
-        //new Flamengo club
+        //new club
         $this->post($this->baseUrl . '/clubs', [
             'name' => 'Flamengo'
         ])
@@ -160,9 +170,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
-        //new Leandro member with Flamengo club
+        //new member
         $this->post($this->endpoint, [
             'name' => 'Leandro',
             'clubs' => [
@@ -175,9 +185,9 @@ class MemberControllerTest extends TestCase
                     'name' => 'Leandro',
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
-        //new club, Flamengo again, to Leandro member
+        //update club to add the same that already exists in the member
         $this->patch($this->endpoint . '/1', [
             'op' => 'add',
             'path' => '/clubs',
@@ -212,7 +222,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         //new Fluminense club
         $this->post($this->baseUrl . '/clubs', [
@@ -224,7 +234,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Fluminense'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         //new Leandro member with Flamengo and Fluminense clubs
         $this->post($this->endpoint, [
@@ -240,7 +250,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Leandro',
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->get($this->endpoint . '/1')
             ->seeJsonEquals([
@@ -273,7 +283,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->post($this->endpoint, [
             'name' => 'Leandro',
@@ -287,7 +297,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Leandro',
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
             'op' => 'add',
@@ -358,7 +368,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->post($this->baseUrl . '/clubs', [
             'name' => 'Fluminense'
@@ -369,7 +379,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Fluminense'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->post($this->endpoint, [
             'name' => 'Leandro',
@@ -383,7 +393,7 @@ class MemberControllerTest extends TestCase
                     'name' => 'Leandro',
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->patch($this->endpoint . '/1', [
             'op' => 'add',
@@ -484,7 +494,7 @@ class MemberControllerTest extends TestCase
                 'id' => 1,
                 'name' => 'Flamengo'
             ]])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->post($this->endpoint, [
             'name' => 'Leandro',
@@ -496,7 +506,7 @@ class MemberControllerTest extends TestCase
                 'id' => 1,
                 'name' => 'Leandro'
             ]])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
         $this->delete($this->endpoint . '/1')
             ->seeStatusCode(204);

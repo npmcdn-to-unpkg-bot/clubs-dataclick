@@ -38,7 +38,7 @@ class MemberController extends Controller
 
             $member = $this->save($request);
 
-            return new JsonResponse([$member], 201);
+            return new JsonResponse([$member], 200);
         } catch (ApiException $e) {
             return $this->makeErrorResponse('Error storing member', $e->errors);
         }

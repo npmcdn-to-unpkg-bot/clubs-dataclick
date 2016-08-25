@@ -15,13 +15,9 @@ class ClubControllerTest extends TestCase
         $this->endpoint = $this->baseUrl . '/clubs';
     }
 
-    /**
-     * Tests in laravel is so poor.
-     * Need other test library.
-     */
     public function testSomeActions()
     {
-        //it returns no body and status 204
+        //new club
         $this->post($this->endpoint, [
             'name' => 'Flamengo',
         ])
@@ -31,9 +27,9 @@ class ClubControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
-        //it returns no body and status 204
+        //new club
         $this->post($this->endpoint, [
             'name' => 'Fluminense'
         ])
@@ -43,9 +39,9 @@ class ClubControllerTest extends TestCase
                     'name' => 'Fluminense'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
-        //it returns status code 204
+        //get clubs
         $this->get($this->endpoint)
             ->seeJsonEquals([
                 [
@@ -59,15 +55,19 @@ class ClubControllerTest extends TestCase
             ])
             ->seeStatusCode(200);
 
+        //delete the club
         $this->delete($this->endpoint . '/1')
             ->seeStatusCode(204);
 
+        //delete the club that does not exist
         $this->delete($this->endpoint . '/1')
             ->seeStatusCode(404);
 
+        //get the club that does not exist
         $this->get($this->endpoint . '/1')
             ->seeStatusCode(404);
 
+        //get the clubs
         $this->get($this->endpoint)
             ->seeJsonEquals([
                 [
@@ -77,6 +77,7 @@ class ClubControllerTest extends TestCase
             ])
             ->seeStatusCode(200);
 
+        //get the club
         $this->get($this->endpoint . '/2')
             ->seeJsonEquals([
                 [
@@ -88,15 +89,18 @@ class ClubControllerTest extends TestCase
             ])
             ->seeStatusCode(200);
 
+        //delete the club
         $this->delete($this->endpoint . '/2')
             ->seeStatusCode(204);
 
+        //get the clubs
         $this->get($this->endpoint)
             ->seeStatusCode(204);
     }
 
     public function testSameClubTwice()
     {
+        //new club
         $this->post($this->endpoint, [
             'name' => 'Flamengo'
         ])
@@ -106,8 +110,9 @@ class ClubControllerTest extends TestCase
                     'name' => 'Flamengo'
                 ]
             ])
-            ->seeStatusCode(201);
+            ->seeStatusCode(200);
 
+        //new same club
         $this->post($this->endpoint, [
             'name' => 'Flamengo'
         ])

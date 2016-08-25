@@ -37,7 +37,7 @@ class ClubController extends Controller
             $club->name = $request->name;
             $club->save();
 
-            return new JsonResponse([$club], 201);
+            return new JsonResponse([$club], 200);
         } catch (ApiException $e) {
             return $this->makeErrorResponse('Error storing club', $e->errors);
         }
