@@ -182,5 +182,4 @@ class ClubControllerTest extends TestCase
             ])
             ->seeStatusCode(200);
     }
-
 }

@@ -478,22 +478,26 @@ class MemberControllerTest extends TestCase
             ->seeStatusCode(200);
     }
 
-    public function testTryStoreMemberWithoutClub() {
+    public function testTryStoreMemberWithoutClub()
+    {
         $this->post($this->endpoint, [
             'name' => 'Leandro'
         ])
             ->seeStatusCode(400);
     }
 
-    public function testDeleteMember() {
+    public function testDeleteMember()
+    {
 
         $this->post($this->baseUrl . '/clubs', [
             'name' => 'Flamengo'
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Flamengo'
-            ]])
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Flamengo'
+                ]
+            ])
             ->seeStatusCode(200);
 
         $this->post($this->endpoint, [
@@ -502,10 +506,12 @@ class MemberControllerTest extends TestCase
                 ['id' => 1]
             ]
         ])
-            ->seeJsonEquals([[
-                'id' => 1,
-                'name' => 'Leandro'
-            ]])
+            ->seeJsonEquals([
+                [
+                    'id' => 1,
+                    'name' => 'Leandro'
+                ]
+            ])
             ->seeStatusCode(200);
 
         $this->delete($this->endpoint . '/1')

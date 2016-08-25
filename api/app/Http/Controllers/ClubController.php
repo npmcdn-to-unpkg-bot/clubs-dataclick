@@ -54,7 +54,8 @@ class ClubController extends Controller
      * @param Request $request
      * @throws ApiException
      */
-    private function validateForm(Request $request) {
+    private function validateForm(Request $request)
+    {
         $validator = Validator::make($request->all(), ['name' => 'required|unique:clubs']);
 
         if ($validator->fails()) {
@@ -93,6 +94,4 @@ class ClubController extends Controller
             return $clubs;
         }
     }
-
-
 }

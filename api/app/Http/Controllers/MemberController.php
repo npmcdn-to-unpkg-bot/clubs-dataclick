@@ -148,5 +148,4 @@ class MemberController extends Controller
                 break;
         }
     }
-
 }
