@@ -3,13 +3,18 @@
         <h3>Relatório de clubes x Associados</h3>
 
         <hr>
-
-        <div ng-repeat="club in clubs | orderBy: 'name'">
+        <div ng-show="clubs.length == 0">
+            <p>Nenhum clube cadastrado.</p>
+        </div>
+        <div ng-show="clubs.length > 0" ng-repeat="club in clubs | orderBy: 'name'">
             <h4>{{ club.name }}</h4>
 
-            <ul class="list-group">
+            <ul class="list-group" ng-show="club.members.length > 0">
                 <li class="list-group-item" ng-repeat="member in club.members | orderBy:'name'">{{ member.name }}</li>
             </ul>
+            <div ng-show="club.members.length == 0">
+                <p>Sem sócios</p>
+            </div>
         </div>
     </div>
 </div>
