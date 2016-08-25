@@ -67,7 +67,7 @@ app.service('MemberService', function ($http, API_ENDPOINT, $q) {
         return deferred.promise;
     };
 
-    this.update = function(id, op, path, value) {
+    this.update = function (id, op, path, value) {
         var deferred = $q.defer();
 
         $http({

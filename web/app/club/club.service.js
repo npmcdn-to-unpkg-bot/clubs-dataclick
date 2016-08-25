@@ -1,12 +1,12 @@
 var app = angular.module('club.service', ['app.config']);
 
 app.service('ClubService', function ($http, API_ENDPOINT, $q) {
-    this.index = function () {
+    this.index = function (fields) {
         var deferred = $q.defer();
 
         $http({
             method: 'GET',
-            url: API_ENDPOINT + '/clubs'
+            url: API_ENDPOINT + '/clubs' + (fields != undefined ? '?fields=' + fields : '')
         }).success(function (clubs) {
             deferred.resolve(clubs);
         }).error(function (err) {
