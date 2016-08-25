@@ -12,15 +12,15 @@ use Validator;
 
 class ClubController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $clubs = Club::all();
+        $clubs = Club::with('members')->get();
 
         if (count($clubs) == 0) {
             return new Response(null, 204);
+        } else {
+            return new JsonResponse($this->makeResponse($request, $clubs));
         }
-
-        return $clubs;
     }
 
     public function show(Request $request, Club $club)
@@ -77,7 +77,22 @@ class ClubController extends Controller
         return new JsonResponse($errors, 400);
     }
 
+    /**
+     * @param Request $request
+     * @param $clubs
+     * @return mixed
+     */
+    private function makeResponse(Request $request, $clubs)
+    {
+        if ($fields = $request->fields) {
+            $fields = explode(',', $fields);
+            array_push($fields, 'id');
 
+            return $clubs->makeHidden(['name', 'members'])->makeVisible($fields);
+        } else {
+            return $clubs;
+        }
+    }
 
 
 }
