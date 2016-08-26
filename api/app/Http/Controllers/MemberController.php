@@ -16,27 +16,26 @@ class MemberController extends Controller
 {
     public function index()
     {
-        $clubs = Member::all();
+        $clubs = $this->getAllMembers();
 
         if (count($clubs) == 0) {
             return new Response(null, 204);
+        } else {
+            return $clubs;
         }
-
-        return $clubs;
     }
 
     public function show(Request $request, Member $member)
     {
-
-        return Member::with('clubs')->where('id', $member->id)->get();
+        return $this->getMemberById($member->id);
     }
 
     public function store(Request $request)
     {
         try {
-            $this->validateFormForStore($request);
+            $this->validateMemberForStore($request);
 
-            $member = $this->save($request);
+            $member = $this->saveMember($request);
 
             return new JsonResponse([$member], 200);
         } catch (ApiException $e) {
@@ -47,9 +46,9 @@ class MemberController extends Controller
     public function update(Request $request, Member $member)
     {
         try {
-            $this->validateFormForUpdate($request);
+            $this->validateMemberForUpdate($request);
 
-            $this->doUpdate($request, $member);
+            $this->updateMember($request, $member);
 
             return new JsonResponse(Member::with('clubs')->where('id', $member->id)->get(), 200);
         } catch (ApiException $e) {
@@ -79,7 +78,7 @@ class MemberController extends Controller
         return new JsonResponse($errors, 400);
     }
 
-    private function validateFormForStore(Request $request)
+    private function validateMemberForStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:members',
@@ -92,7 +91,7 @@ class MemberController extends Controller
         }
     }
 
-    private function validateFormForUpdate(Request $request)
+    private function validateMemberForUpdate(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'op' => 'required',
@@ -110,7 +109,7 @@ class MemberController extends Controller
      * @param Request $request
      * @return Member
      */
-    private function save(Request $request)
+    private function saveMember(Request $request)
     {
         $member = new Member();
         $member->name = $request->name;
@@ -127,7 +126,7 @@ class MemberController extends Controller
      * @param Request $request
      * @param Member $member
      */
-    private function doUpdate(Request $request, Member $member)
+    private function updateMember(Request $request, Member $member)
     {
         switch ($request->op) {
             case 'add':
@@ -147,5 +146,29 @@ class MemberController extends Controller
                 }
                 break;
         }
+    }
+
+    /**
+     * @param bool $withClubs
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getAllMembers($withClubs = false)
+    {
+        if ($withClubs) {
+            $clubs = Member::with('clubs')->get();
+        } else {
+            $clubs = Member::all();
+        }
+
+        return $clubs;
+    }
+
+    /**
+     * @param int $id
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getMemberById($id)
+    {
+        return Member::with('clubs')->where('id', $id)->get();
     }
 }

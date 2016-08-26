@@ -14,28 +14,26 @@ class ClubController extends Controller
 {
     public function index(Request $request)
     {
-        $clubs = Club::with('members')->get();
+        $clubs = $this->getAllClubs();
 
         if (count($clubs) == 0) {
             return new Response(null, 204);
         } else {
-            return new JsonResponse($this->makeResponse($request, $clubs));
+            return new JsonResponse($this->makeIndexResponse($request, $clubs));
         }
     }
 
     public function show(Request $request, Club $club)
     {
-        return Club::with('members')->where('id', $club->id)->get();
+        return $this->getClubById($club->id);
     }
 
     public function store(Request $request)
     {
         try {
-            $this->validateForm($request);
+            $this->validateClub($request);
 
-            $club = new Club();
-            $club->name = $request->name;
-            $club->save();
+            $club = $this->saveClub($request);
 
             return new JsonResponse([$club], 200);
         } catch (ApiException $e) {
@@ -54,7 +52,7 @@ class ClubController extends Controller
      * @param Request $request
      * @throws ApiException
      */
-    private function validateForm(Request $request)
+    private function validateClub(Request $request)
     {
         $validator = Validator::make($request->all(), ['name' => 'required|unique:clubs']);
 
@@ -83,7 +81,7 @@ class ClubController extends Controller
      * @param $clubs
      * @return mixed
      */
-    private function makeResponse(Request $request, $clubs)
+    private function makeIndexResponse(Request $request, $clubs)
     {
         if ($fields = $request->fields) {
             $fields = explode(',', $fields);
@@ -93,5 +91,42 @@ class ClubController extends Controller
         } else {
             return $clubs;
         }
+    }
+
+    /**
+     * @param bool $withMembers
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getAllClubs($withMembers = true)
+    {
+        if ($withMembers) {
+            $clubs = Club::with('members')->get();
+        } else {
+            $clubs = Club::all();
+        }
+
+        return $clubs;
+    }
+
+    /**
+     * @param string $id
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getClubById($id)
+    {
+        return Club::with('members')->where('id', '=', $id)->get();
+    }
+
+    /**
+     * @param Request $request
+     * @return Club
+     */
+    private function saveClub(Request $request)
+    {
+        $club = new Club();
+        $club->name = $request->name;
+        $club->save();
+
+        return $club;
     }
 }
